@@ -2,7 +2,11 @@ package ch.makery.direcciones;
 
 import java.io.IOException;
 
+import ch.makery.direcciones.model.Persona;
+import ch.makery.direcciones.view.PersonOverviewController;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -47,8 +51,13 @@ public class MainApp extends Application {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(MainApp.class.getResource("view/PersonaOverview.fxml"));
 			AnchorPane personaOverview = (AnchorPane) loader.load();
+
 			//Carga los datos de la persona en el centro del diseño raíz.
 			rootLayout.setCenter(personaOverview);
+
+			//Darle al controlador acceso a la App
+			PersonOverviewController controller = loader.getController();
+			controller.setMainApp(this);
 		}catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -59,6 +68,26 @@ public class MainApp extends Application {
 	 */
 	public Stage getPriStage(){
 		return primaryStage;
+	}
+	/**
+	 * Lista de personas en una ObservableList
+	 */
+	private ObservableList<Persona> personData = FXCollections.observableArrayList();
+	/**
+	 * Constructor
+	 */
+	public MainApp(){
+		//Agregar algunas personas a la lista
+		personData.add(new Persona("Juan", "Perez"));
+		personData.add(new Persona("Pedro", "Perez"));
+		personData.add(new Persona("Pablo", "Perez"));
+	}
+	/**
+	 * Devuelve los datos como una lista observable de personas.
+	 * @return
+	 */
+	public ObservableList<Persona> getPersonData(){
+		return personData;
 	}
 	public static void main(String[] args) {
 		launch(args);
